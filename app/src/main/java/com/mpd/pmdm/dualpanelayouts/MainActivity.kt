@@ -1,5 +1,6 @@
 package com.mpd.pmdm.dualpanelayouts
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -35,6 +36,10 @@ class MainActivity : AppCompatActivity(), StarSignListener {
                 .findFragmentById(R.id.star_sign_detail) as DetailFragment
             //Pasamos el id, que nos viene desde el ListFragment, a la función de DetailFragment
             detailFragment.setStarSignData(id)
+        } else {
+            val detailIntent = Intent(this, DetailActivity::class.java)
+            detailIntent.putExtra(STAR_SIGN_ID, id)
+            startActivity(detailIntent)
         }
     }
 }
