@@ -121,7 +121,7 @@
             android:background="?android:attr/dividerVertical" />
 
         <TextView
-            android:id="@+id/saggitarius"
+            android:id="@+id/sagittarius"
             style="@style/StarSignTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
