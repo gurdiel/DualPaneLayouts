@@ -12,10 +12,13 @@
         android:layout_height="match_parent"
         android:layout_width="0dp"
         android:layout_weight="1"/>
+
+    <!-- Esta View sólo hace de separador entre los dos fragmentos-->
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="?android:attr/dividerVertical" />
+
     <fragment
         android:id="@+id/star_sign_detail"
         android:name="com.mpd.pmdm.dualpanelayouts.DetailFragment"
