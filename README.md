@@ -22,8 +22,8 @@ Esto se hace desde la vista Android del proyecto, sobre res/layout  seleccionamo
 
 De este modo, tendremos dos layouts, controlados ambos desde el mismo _MainActivity.kt._
 
-En este proyecto se puede observar una forma de comunicar distintos fragmentos entre sí (para el caso de la tableta). En este caso se hace a través de las actividad que las contiene. 
- - Definimos una interface StarSignListener, que simplemente tiene una función que hace de Listener. En este caso se define directamente en el archivo MainActivity.kt. Esta interface está diseñada para que la Actividad padre de los fragmentos la implemente, y así haga de "escucha" para pasar la info necesaria al hacer click en algún elemento del primer fragmento, al segundo:
+En este proyecto se puede observar una forma de comunicar distintos fragmentos entre sí (para el caso de la tableta) siguiendo el [patrón observador](https://wiki.yowu.dev/es/Knowledge-base/Kotlin/Learning/063-the-observer-pattern-in-kotlin-implementing-the-observer-design-pattern):  
+ - Definimos una interface StarSignListener, que simplemente tiene una función que hace de Listener u observador. En este caso se define directamente en el archivo MainActivity.kt aunque se podría definir en un archivo aparte. Esta interface está diseñada para que la Actividad padre de los fragmentos la implemente, y así haga de observador de cualquier cambio de estado del fragmento y pase la info necesaria al hacer click en algún elemento del primer fragmento, al segundo:
 ```
 interface StarSignListener{
     /**
