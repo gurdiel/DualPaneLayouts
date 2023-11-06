@@ -23,4 +23,65 @@ Esto se hace desde la vista Android del proyecto, sobre res/layout  seleccionamo
 De este modo, tendremos dos layouts, controlados ambos desde el mismo _MainActivity.kt._
 
 En este proyecto se puede observar una forma de comunicar distintos fragmentos entre sí (para el caso de la tableta). En este caso se hace a través de las actividad que las contiene. 
- - Definimos una clase de tipo interface, que simplemente tiene una función que hace de Listener
+ - Definimos una interface StarSignListener, que simplemente tiene una función que hace de Listener. En este caso se define directamente en el archivo MainActivity.kt. Esta interface está diseñada para que la Actividad padre de los fragmentos la implemente, y así haga de "escucha" para pasar la info necesaria al hacer click en algún elemento del primer fragmento, al segundo:
+```
+interface StarSignListener{
+    /**
+     * Cuando se selecciona un signo del zodiaco en ListFragment
+     * se llama a la implementación de este método
+     */
+    fun onSelected(id: Int)
+}
+```
+ - Nuestra clase MainActivity implementa esta interface, y por tanto, está obligada a dar implementación a ese método. En dicha implementación define lo que debe hacer si se trata de un panel dual (una actividad con dos fragmentos) o si se trata de la versión con dos actividades. (Fijaros cómo se asigna valor a isDualPane en la función onCreate()):
+```
+override fun onSelected(id: Int) {
+    if(isDualPane){
+        val detailFragment = supportFragmentManager
+            .findFragmentById(R.id.star_sign_detail) as DetailFragment
+        //Pasamos el id, que nos viene desde el ListFragment, a la función de DetailFragment
+        detailFragment.setStarSignData(id)
+    } else {
+        val detailIntent = Intent(this, DetailActivity::class.java)
+        detailIntent.putExtra(STAR_SIGN_ID, id)
+        startActivity(detailIntent)
+    }
+}
+```
+ - Como podéis ver, en el caso del panel dual, se localiza un fragmento que ya está cargado a través del supportFragmentManager, con su función findFragmentById, y se castea para que sea una instancia del DetailFragment y poder usar sus funciones. 
+ - Seguidamente se llama la función setStarSignData de la instancia de DetailFragment, que lo que hace es simplemente asignar los valores correspondientes al signo pulsado en los atributos de sus View (todos de tipo TextView).
+
+Con esto ya tenemos lista nuestra MainActivity el DetailFragment para comunicarse, pero falta ver cómo se genera la llamada a la función implementada de la interface desde el ListFragment.
+En ListFragment:
+ - Definimos un atributo para almacenar la referencia al Listener que usaremos para pasarle los clicks en los elementos del listado:
+```
+//Nos comprometemos a iniciarlo
+private lateinit var starSignListener: StarSignListener
+```
+ - Lo inicializamos en onAttach(), justo cuando el fragmento se añade a su Actividad correspondiente.
+```
+ override fun onAttach(context: Context) {
+     super.onAttach(context)
+     if(context is StarSignListener){
+         starSignListener = context
+     } else{
+       throw RuntimeException("Must implement StarSignListener")
+     }
+     //Valdría también lo siguiente
+//        if(activity is StarSignListener){
+//            starSignListener = activity as StarSignListener
+//        }
+ }
+```
+ - En onViewCreated, cuando ya tenemos nuestra jerarquía de vistas disponible, asociamos a cada View signo (que previamente hemos introducido en una lista, para ahorrar código), en su setOnClickListener, el listener correspondiente que hemos inicializado antes:
+```
+starSigns.forEach{
+   it.setOnClickListener{
+       starSignListener.onSelected(it.id)
+   }
+}
+```
+
+Con esto, y tras añadir el código correspondiente para navegación entre Actividades para pantallas normales, ya tendremos nuestra aplicación de panel dual funcional.
+
+

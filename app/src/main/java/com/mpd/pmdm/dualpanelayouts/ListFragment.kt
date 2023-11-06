@@ -25,6 +25,10 @@ class ListFragment : Fragment(){
         } else{
           throw RuntimeException("Must implement StarSignListener")
         }
+        //Valdría también lo siguiente
+//        if(activity is StarSignListener){
+//            starSignListener = activity as StarSignListener
+//        }
     }
 
     override fun onCreateView(
