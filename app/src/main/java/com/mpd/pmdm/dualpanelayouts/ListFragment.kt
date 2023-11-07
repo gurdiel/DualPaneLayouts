@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.TextView
 
 
 class ListFragment : Fragment(){
@@ -58,14 +59,13 @@ class ListFragment : Fragment(){
             view.findViewById(R.id.capricorn),
         )
 
-        //Asociamos a cada TextView de Signo el propio fragment como onClickListener (porque lo implementamos)
-        //Basado en ejemplo: https://www.geeksforgeeks.org/how-to-communicate-between-fragments-in-android/
+
+        //Al hacer click en un signo, pasamos el signo pulsado al Listener
         starSigns.forEach{
             it.setOnClickListener{
                 starSignListener.onSelected(it.id)
             }
         }
-
     }
 
 }
